@@ -13,7 +13,7 @@ var MONGODB_URI = "mongodb://admin:admin@ds119685.mlab.com:19685/oneschool"
 var db;
 
 // Connect to the database before starting the application server.
-mongodb.MongoClient.connect(MONGODB_URI, function (err, database) {
+mongodb.MongoClient.connect(process.env.MONGODB_URI || MONGODB_URI, function (err, database) {
   if (err) {
     console.log(err);
     process.exit(1);
@@ -24,7 +24,7 @@ mongodb.MongoClient.connect(MONGODB_URI, function (err, database) {
   console.log("Database connection ready");
 
   // Initialize the app.
-  var server = app.listen(8500, function () {
+  var server = app.listen(process.env.PORT || 5000, function () {
     var port = server.address().port;
     console.log("App now running on port", port);
   });
