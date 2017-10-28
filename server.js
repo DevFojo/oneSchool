@@ -1,5 +1,6 @@
 var express = require("express");
 var bodyParser = require("body-parser");
+const path = require('path');
 var mongodb = require("mongodb");
 var ObjectID = mongodb.ObjectID;
 
@@ -7,7 +8,7 @@ var CONTACTS_COLLECTION = "students";
 
 var app = express();
 app.use(bodyParser.json());
-
+app.use(express.static(path.join(__dirname, 'dist')));
 var MONGODB_URI = "mongodb://admin:admin@ds119685.mlab.com:19685/oneschool"
 // Create a database variable outside of the database connection callback to reuse the connection pool in your app.
 var db;
@@ -107,8 +108,4 @@ app.delete("/api/students/:id", function(req, res) {
       res.status(200).json(req.params.id);
     }
   });
-});
-
-app.get('/', (req, res) => {
-  res.status(200).send('Hello, world!').end();
 });
