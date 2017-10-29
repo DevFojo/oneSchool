@@ -7,6 +7,7 @@ var ObjectID = mongodb.ObjectID;
 var CONTACTS_COLLECTION = "students";
 
 var app = express();
+app.use(compression());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'dist')));
 var MONGODB_URI = "mongodb://admin:admin@ds119685.mlab.com:19685/oneschool"
