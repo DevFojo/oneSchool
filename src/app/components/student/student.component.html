@@ -1,32 +1,33 @@
 <div class="ui text container">
   <div>
     <h1>Students of OneSchool</h1>
-    <button class="ui right floated basic green button " (click)="loadAddStudentModal()">
+    <button class="ui basic green button " (click)="loadAddStudentModal()">
       Add
     </button>
   </div>
-  <div *ngIf="students; else elseBlock" class="ui cards">
-    <div *ngFor="let student of students" class="card">
-      <div class="content">
-        <img *ngIf="student.gender == 'female'; else maleImage" class="right floated mini ui image" src="https://semantic-ui.com/images/avatar/large/jenny.jpg">
-        <ng-template #maleImage>
-          <img class="right floated mini ui image" src="https://semantic-ui.com/images/avatar/large/elliot.jpg">
-        </ng-template>
-        <div class="header">
-          {{student.firstName}} {{student.lastName}}
+  <br>
+  <div *ngIf="students && students.length > 0; else elseBlock" class="ui cards three column grid">
+    <div *ngFor="let student of students" class="column">
+      <div class="ui fluid card">
+        <div class="content">
+          <img *ngIf="student?.gender == 'female'; else maleImage" class="right floated mini ui image" src="https://semantic-ui.com/images/avatar/large/jenny.jpg">
+          <ng-template #maleImage>
+            <img class="right floated mini ui image" src="https://semantic-ui.com/images/avatar/large/elliot.jpg">
+          </ng-template>
+          <div class="header">
+            {{student?.firstName}} {{student?.lastName}}
+          </div>
+          <div class="meta">
+            {{student.level}}
+          </div>
+          <div *ngIf="student?.department && student.faculty" class="description">
+            {{student.department}}, {{student.faculty}}
+          </div>
         </div>
-        <div class="meta">
-          {{student.level}}
-        </div>
-        <div *ngIf="student.department && student.faculty" class="description">
-          {{student.department}}, {{student.faculty}}
-        </div>
-      </div>
-      <div class="extra content">
-        <div class="ui three buttons">
-          <button class="ui basic blue button" (click)="loadStudentDetailsModal(student)">Details</button>
-          <button class="ui basic yellow button" (click)="loadEditStudentModal(student)">Edit</button>
-          <button class="ui basic red button" (click)="loadDeleteConfirmation()">Delete</button>
+        <div class="ui bottom attached two buttons">
+          <button class="mini ui basic blue button" (click)="loadStudentDetailsModal(student)">Details</button>
+          <!-- <button class="ui basic yellow button" (click)="loadEditStudentModal(student)">Edit</button> -->
+          <button class="mini ui basic red button" (click)="loadDeleteConfirmation()">Delete</button>
         </div>
       </div>
     </div>
@@ -46,52 +47,51 @@
     Add A Student
   </div>
   <div class="content">
-    <form class="ui form" [formGroup]="addStudentForm" (ngSubmit)="add(addStudentForm.value)">
+    <form class="ui form" (ngSubmit)="add()" #addStudentForm="ngForm">
       <h4 class="ui dividing header">Personal Information</h4>
       <div class="two fields">
         <div class="field">
           <label>First Name</label>
-          <input type="text" formControlName="firstName" placeholder="First Name" required #firstName="ngControl">
-          <div class="alert" [hidden]="firstName.valid">Required</div>
+          <input type="text" name="firstName" placeholder="First Name" [(ngModel)]="student.firstName">
         </div>
         <div class="field">
           <label>Last Name</label>
-          <input type="text" formControlName="lastName" placeholder="Last Name" required>
+          <input type="text" name="lastName" placeholder="Last Name" required>
         </div>
       </div>
-      <div class="two fields">
+      <!-- <div class="two fields">
         <div class="field">
           <label>Date of Birth</label>
-          <input type="date" formControlName="dob" placeholder="First Name">
+          <input type="date" formControlName="dob" placeholder="Date of Birth">
         </div>
         <div class="field">
           <label>Gender</label>
           <select class="ui dropdown" formControlName="gender">
-            <option value="">Gender</option>
+            <option>Gender</option>
             <option value="1">Male</option>
             <option value="0">Female</option>
           </select>
         </div>
-      </div>
-      <h4 class="ui dividing header">Student Information</h4>
+      </div> -->
+      <!-- <h4 class="ui dividing header">Student Information</h4>
       <div class="four fields">
         <div class="field">
           <label>Matric No.</label>
-          <input type="text" formControlName="matricNo" placeholder="Matric No.">
+          <input type="text" formControlName="matricNo" placeholder="Matric No." required>
         </div>
         <div class="field">
           <label>Faculty</label>
-          <input type="text" formControlName="department" placeholder="Last Name">
+          <input type="text" formControlName="department" placeholder="Faculty" required>
         </div>
         <div class="field">
           <label>Department</label>
-          <input type="text" formControlName="lastName" placeholder="Department">
+          <input type="text" formControlName="lastName" placeholder="Department" required>
         </div>
         <div class="field">
           <label>Level</label>
-          <input type="text" formControlName="level" placeholder="Level">
+          <input type="text" formControlName="level" placeholder="Level" required>
         </div>
-      </div>
+      </div> -->
       <input class="ui primary button" type="submit" [disabled]="!addStudentForm.valid" value="Submit">
     </form>
   </div>
