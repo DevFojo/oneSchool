@@ -10,9 +10,5 @@ export class AppComponent {
   students: any;
   title = 'app';
 
-  constructor(private _studentService: StudentService){
-    debugger;
-    this._studentService.getAll().subscribe(res => this.students = res);
-
-  }
+  
 }

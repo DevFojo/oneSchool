@@ -1,0 +1,106 @@
+<div class="ui text container">
+  <div>
+    <h1>Students of OneSchool</h1>
+    <button class="ui right floated basic green button " (click)="loadAddStudentModal()">
+      Add
+    </button>
+  </div>
+  <div *ngIf="students; else elseBlock" class="ui cards">
+    <div *ngFor="let student of students" class="card">
+      <div class="content">
+        <img *ngIf="student.gender == 'female'; else maleImage" class="right floated mini ui image" src="https://semantic-ui.com/images/avatar/large/jenny.jpg">
+        <ng-template #maleImage>
+          <img class="right floated mini ui image" src="https://semantic-ui.com/images/avatar/large/elliot.jpg">
+        </ng-template>
+        <div class="header">
+          {{student.firstName}} {{student.lastName}}
+        </div>
+        <div class="meta">
+          {{student.level}}
+        </div>
+        <div *ngIf="student.department && student.faculty" class="description">
+          {{student.department}}, {{student.faculty}}
+        </div>
+      </div>
+      <div class="extra content">
+        <div class="ui three buttons">
+          <button class="ui basic blue button" (click)="loadStudentDetailsModal(student)">Details</button>
+          <button class="ui basic yellow button" (click)="loadEditStudentModal(student)">Edit</button>
+          <button class="ui basic red button" (click)="loadDeleteConfirmation()">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #elseBlock>
+  <div class="ui text container">
+    <h1>Our MongoDB is not Working!</h1>
+  </div>
+</ng-template>
+
+
+
+
+<div class="ui modal scrolling transition hidden" style="top: 466px;" id="addStudentForm">
+  <div class="header">
+    Add A Student
+  </div>
+  <div class="content">
+    <form class="ui form" [formGroup]="addStudentForm" (ngSubmit)="add(addStudentForm.value)">
+      <h4 class="ui dividing header">Personal Information</h4>
+      <div class="two fields">
+        <div class="field">
+          <label>First Name</label>
+          <input type="text" formControlName="firstName" placeholder="First Name" required #firstName="ngControl">
+          <div class="alert" [hidden]="firstName.valid">Required</div>
+        </div>
+        <div class="field">
+          <label>Last Name</label>
+          <input type="text" formControlName="lastName" placeholder="Last Name" required>
+        </div>
+      </div>
+      <div class="two fields">
+        <div class="field">
+          <label>Date of Birth</label>
+          <input type="date" formControlName="dob" placeholder="First Name">
+        </div>
+        <div class="field">
+          <label>Gender</label>
+          <select class="ui dropdown" formControlName="gender">
+            <option value="">Gender</option>
+            <option value="1">Male</option>
+            <option value="0">Female</option>
+          </select>
+        </div>
+      </div>
+      <h4 class="ui dividing header">Student Information</h4>
+      <div class="four fields">
+        <div class="field">
+          <label>Matric No.</label>
+          <input type="text" formControlName="matricNo" placeholder="Matric No.">
+        </div>
+        <div class="field">
+          <label>Faculty</label>
+          <input type="text" formControlName="department" placeholder="Last Name">
+        </div>
+        <div class="field">
+          <label>Department</label>
+          <input type="text" formControlName="lastName" placeholder="Department">
+        </div>
+        <div class="field">
+          <label>Level</label>
+          <input type="text" formControlName="level" placeholder="Level">
+        </div>
+      </div>
+      <input class="ui primary button" type="submit" [disabled]="!addStudentForm.valid" value="Submit">
+    </form>
+  </div>
+</div>
+
+<div class="ui modal scrolling transition hidden" style="top: 466px;" id="editStudentForm">
+  Edit Student Modal
+</div>
+
+<div class="ui modal scrolling transition hidden" style="top: 466px;" id="viewStudentForm">
+  Edit Student Modal
+</div>

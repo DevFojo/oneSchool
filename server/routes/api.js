@@ -46,6 +46,26 @@ router.get("/students", function (req, res) {
   });
 });
 
+router.post("/students", function (req, res) {
+  var newStudent = req.body;
+  connection((db) => {
+    db.collection(Students_Collection)
+      .save(req.body, (err, result) => {
+        if (err) {
+          return console.log(err);
+        }
+        return console.log(result);
+      });
+    // .then((students) => {
+    //   response.data = students;
+    //   res.json(response);
+    // })
+    // .catch((err) => {
+    //   debugger;
+    //   sendError(err, res);
+    // });
+  });
+});
 // app.post("/api/students", function (req, res) {
 //   var newContact = req.body;
 //   newContact.createDate = new Date();
