@@ -16,7 +16,8 @@ export class StudentComponent implements OnInit {
   post: any;                     // A property for our submitted form
   description: string = '';
   name: string = '';
-  student: any;
+  newStudent: any;
+  selectedStudent: any;
 
   constructor(private _studentService: StudentService, private _addStudentFormBuilder: FormBuilder) {
 
@@ -25,17 +26,18 @@ export class StudentComponent implements OnInit {
   ngOnInit() {
     this._studentService.getAll().subscribe(res => this.students = res);
     $('.ui.dropdown').dropdown();
-    this.student = {
+    this.newStudent = {
       'firstName': '',
-      'lastName': 'this.student.lastName',
-      'gender': 'this.student.gender',
-      'faculty': 'this.student.faculty',
-      'dob': 'this.student.dob',
-      'matricNo': 'this.student.matricNo',
-      'department': 'this.student.department',
-      'level': 'this.student.level'
+      'lastName': '',
+      'gender': '',
+      'faculty': '',
+      'dob': '',
+      'matricNo': '',
+      'department': '',
+      'level': ''
     }
   }
+
 
   loadAddStudentModal() {
     $('#addStudentForm')
@@ -44,26 +46,36 @@ export class StudentComponent implements OnInit {
 
   loadEditStudentModal(student: any) {
     console.log(student);
+    this.selectedStudent = student;
     $('#editStudentForm')
       .modal('show');
   }
 
   loadStudentDetailsModal(student: any) {
     console.log(student);
+    $('#studentDetails-name').html(student.firstName + ' ' + student.lastName);
+    $('#studentDetails-matricNo').html(student.matricNo);
+    $('#studentDetails-firstName').html(student.firstName);
+    $('#studentDetails-lastName').html(student.lastName);
+    $('#studentDetails-gender').html(student.gender);
+    $('#studentDetails-dob').html(student.dob);
+    $('#studentDetails-department').html(student.department);
+    $('#studentDetails-faculty').html(student.faculty);
+    $('#studentDetails-level').html(student.level);
     $('#viewStudentForm')
       .modal('show');
   }
   add() {
-    console.log(this.student);
+    console.log(this.newStudent);
     var newStudent = {
-      'firstName': this.student.firstName,
-      'lastName': this.student.lastName,
-      'gender': this.student.gender,
-      'faculty': this.student.faculty,
-      'dob': this.student.dob,
-      'matricNo': this.student.matricNo,
-      'department': this.student.department,
-      'level': this.student.level
+      'firstName': this.newStudent.firstName,
+      'lastName': this.newStudent.lastName,
+      'gender': this.newStudent.gender,
+      'faculty': this.newStudent.faculty,
+      'dob': this.newStudent.dob,
+      'matricNo': this.newStudent.matricNo,
+      'department': this.newStudent.department,
+      'level': this.newStudent.level
     };
     this._studentService.create(newStudent).subscribe(res => this.students.push(res));
   }

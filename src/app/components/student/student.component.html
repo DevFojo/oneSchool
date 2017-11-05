@@ -1,45 +1,55 @@
-<div class="ui text container">
+<div class="ui container">
   <div>
-    <h1>Students of OneSchool</h1>
+    <h1>Student List</h1>
     <button class="ui basic green button " (click)="loadAddStudentModal()">
       Add
     </button>
   </div>
   <br>
-  <div *ngIf="students && students.length > 0; else elseBlock" class="ui cards three column grid">
-    <div *ngFor="let student of students" class="column">
-      <div class="ui fluid card">
-        <div class="content">
-          <img *ngIf="student?.gender == 'female'; else maleImage" class="right floated mini ui image" src="https://semantic-ui.com/images/avatar/large/jenny.jpg">
-          <ng-template #maleImage>
-            <img class="right floated mini ui image" src="https://semantic-ui.com/images/avatar/large/elliot.jpg">
-          </ng-template>
-          <div class="header">
-            {{student?.firstName}} {{student?.lastName}}
-          </div>
-          <div class="meta">
-            {{student.level}}
-          </div>
-          <div *ngIf="student?.department && student.faculty" class="description">
-            {{student.department}}, {{student.faculty}}
-          </div>
-        </div>
-        <div class="ui bottom attached two buttons">
-          <button class="mini ui basic blue button" (click)="loadStudentDetailsModal(student)">Details</button>
-          <!-- <button class="ui basic yellow button" (click)="loadEditStudentModal(student)">Edit</button> -->
-          <button class="mini ui basic red button" (click)="loadDeleteConfirmation()">Delete</button>
-        </div>
-      </div>
-    </div>
+  <div class="ui container">
+    <table *ngIf="students && students.length > 0; else elseBlock" class="ui celled table">
+      <thead>
+        <tr>
+          <th>S/N</th>
+          <th>Matric Number</th>
+          <th>Name</th>
+          <th>Department</th>
+          <th>Faculty</th>
+          <th>Level</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let student of students ; let i=index">
+          <td>{{i+1}}</td>
+          <td>{{student.matricNo}}</td>
+          <td>
+            <h4 class="ui header">
+              <div class="content">
+                {{student.firstName}} {{student.lastName}}
+              </div>
+            </h4>
+          </td>
+          <td>{{student.department}}</td>
+          <td>{{student.faculty}}</td>
+          <td>{{student.level}}</td>
+          <td>
+            <div class="ui three buttons">
+              <button class="ui basic blue button" (click)="loadStudentDetailsModal(student)">Details</button>
+              <button class="ui basic yellow button" (click)="loadEditStudentModal(student)">Edit</button>
+              <button class="ui basic red button" (click)="loadDeleteConfirmation(student)">Delete</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 <ng-template #elseBlock>
-  <div class="ui text container">
-    <h1>Our MongoDB is not Working!</h1>
+  <div class="ui container">
+    <h4 class=" ui error">No student has been added.</h4>
   </div>
 </ng-template>
-
-
 
 
 <div class="ui modal scrolling transition hidden" style="top: 466px;" id="addStudentForm">
@@ -52,47 +62,47 @@
       <div class="two fields">
         <div class="field">
           <label>First Name</label>
-          <input type="text" name="firstName" placeholder="First Name" [(ngModel)]="student.firstName">
+          <input type="text" name="firstName" placeholder="First Name" required [(ngModel)]="newStudent.firstName">
         </div>
         <div class="field">
           <label>Last Name</label>
-          <input type="text" name="lastName" placeholder="Last Name" required>
+          <input type="text" name="lastName" placeholder="Last Name" required [(ngModel)]="newStudent.lastName">
         </div>
       </div>
-      <!-- <div class="two fields">
+      <div class="two fields">
         <div class="field">
           <label>Date of Birth</label>
-          <input type="date" formControlName="dob" placeholder="Date of Birth">
+          <input type="date" name="dob" placeholder="Date of Birth" [(ngModel)]="newStudent.dob" required>
         </div>
         <div class="field">
           <label>Gender</label>
-          <select class="ui dropdown" formControlName="gender">
+          <select class="ui dropdown" name="gender" [(ngModel)]="newStudent.gender" required>
             <option>Gender</option>
-            <option value="1">Male</option>
-            <option value="0">Female</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
           </select>
         </div>
-      </div> -->
-      <!-- <h4 class="ui dividing header">Student Information</h4>
+      </div>
+      <h4 class="ui dividing header">Student Information</h4>
       <div class="four fields">
         <div class="field">
           <label>Matric No.</label>
-          <input type="text" formControlName="matricNo" placeholder="Matric No." required>
+          <input type="text" name="matricNo" placeholder="Matric No." required [(ngModel)]="newStudent.matricNo">
         </div>
         <div class="field">
           <label>Faculty</label>
-          <input type="text" formControlName="department" placeholder="Faculty" required>
+          <input type="text" name="department" placeholder="Faculty" required [(ngModel)]="newStudent.faculty">
         </div>
         <div class="field">
           <label>Department</label>
-          <input type="text" formControlName="lastName" placeholder="Department" required>
+          <input type="text" name="lastName" placeholder="Department" required [(ngModel)]="newStudent.department">
         </div>
         <div class="field">
           <label>Level</label>
-          <input type="text" formControlName="level" placeholder="Level" required>
+          <input type="text" name="level" placeholder="Level" required [(ngModel)]="newStudent.level">
         </div>
-      </div> -->
-      <input class="ui primary button" type="submit" [disabled]="!addStudentForm.valid" value="Submit">
+      </div>
+      <input class="ui primary button" type="submit" value="Submit">
     </form>
   </div>
 </div>
@@ -102,5 +112,41 @@
 </div>
 
 <div class="ui modal scrolling transition hidden" style="top: 466px;" id="viewStudentForm">
-  Edit Student Modal
+  <div class="header" id="studentDetails-name"></div>
+  <div class="content">
+    <table class="ui very basic definition  table" style="border:0px">
+      <tr>
+        <td>Matric Number</td>
+        <td id="studentDetails-matricNo"></td>
+      </tr>
+      <tr>
+        <td>First Name</td>
+        <td id="studentDetails-firstName"></td>
+      </tr>
+      <tr>
+        <td>Last Name</td>
+        <td id="studentDetails-lastName"></td>
+      </tr>
+      <tr>
+        <td>Gender</td>
+        <td id="studentDetails-gender"></td>
+      </tr>
+      <tr>
+        <td>Date of Birth</td>
+        <td id="studentDetails-dob"></td>
+      </tr>
+      <tr>
+        <td>Department</td>
+        <td id="studentDetails-department"></td>
+      </tr>
+      <tr>
+        <td>Faculty</td>
+        <td id="studentDetails-faculty"></td>
+      </tr>
+      <tr>
+        <td>Level</td>
+        <td id="studentDetails-level"></td>
+      </tr>
+    </table>
+  </div>
 </div>
