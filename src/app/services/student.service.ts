@@ -15,7 +15,7 @@ export class StudentService {
   }
 
   create(student: any) {
-    return this._http.post('/api/students', student).map(result => result.json());
+    return this._http.post('/api/student', student).map(result => result.json());
   }
 
   update(student: any) {
