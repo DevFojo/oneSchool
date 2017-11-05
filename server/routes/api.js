@@ -33,7 +33,7 @@ router.get('/student/:id', function (req, res, next) {
 router.post('/student', function (req, res, next) {
   var student = req.body;
   console.log(req);
-  if (!student.text || !(student.isCompleted + '')) {
+  if (!student) {
     res.status(400);
     res.json({
       "error": "Invalid Data"
