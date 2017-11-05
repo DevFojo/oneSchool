@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StudentService } from '../../services/student.service';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { Student } from '../../models/student';
 declare var jquery: any;
 declare var $: any;
 
@@ -12,13 +11,9 @@ declare var $: any;
 })
 export class StudentComponent implements OnInit {
   students: Array<any>;
-  post: any;                     // A property for our submitted form
-  description: string = '';
-  name: string = '';
   newStudent: any;
-  selectedStudent: any;
 
-  constructor(private _studentService: StudentService, private _addStudentFormBuilder: FormBuilder) {
+  constructor(private _studentService: StudentService) {
 
   }
 
@@ -43,8 +38,7 @@ export class StudentComponent implements OnInit {
     console.log(student);
     this.newStudent = student;
     $('#editStudent-gender').val(student.gender).change();
-    $('#editStudentForm')
-      .modal('show');
+    $('#editStudentForm').modal('show');
   }
 
   loadStudentDetailsModal(student: any) {
@@ -59,8 +53,7 @@ export class StudentComponent implements OnInit {
     $('#studentDetails-department').html(student.department);
     $('#studentDetails-faculty').html(student.faculty);
     $('#studentDetails-level').html(student.level);
-    $('#viewStudentForm')
-      .modal('show');
+    $('#viewStudentForm').modal('show');
   }
   studentModelInit() {
     this.newStudent = {
@@ -103,6 +96,7 @@ export class StudentComponent implements OnInit {
     this._studentService.update(this.newStudent).subscribe(res => {
       console.log(res);
     });
+    $('#editStudentForm').modal('hide');    
     this.studentModelInit();
   }
 
