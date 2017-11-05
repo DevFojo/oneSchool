@@ -53,11 +53,12 @@
 
 
 <div class="ui modal scrolling transition hidden" style="top: 466px;" id="addStudentForm">
+  <i class="close icon"></i>
   <div class="header">
     Add A Student
   </div>
   <div class="content">
-    <form class="ui form" (ngSubmit)="add()" #addStudentForm="ngForm">
+    <form class="ui form" (ngSubmit)="add()">
       <h4 class="ui dividing header">Personal Information</h4>
       <div class="two fields">
         <div class="field">
@@ -108,10 +109,63 @@
 </div>
 
 <div class="ui modal scrolling transition hidden" style="top: 466px;" id="editStudentForm">
-  Edit Student Modal
+  <i class="close icon"></i>
+  <div class="header">
+    Edit Student
+  </div>
+  <div class="content">
+    <form class="ui form" (ngSubmit)="edit()">
+      <h4 class="ui dividing header">Personal Information</h4>
+      <div class="two fields">
+        <div class="field">
+          <label for="firstName">First Name</label>
+          <input type="text" id="editStudent-firstName" name="firstName" placeholder="First Name" required [(ngModel)]="newStudent.firstName">
+        </div>
+        <div class="field">
+          <label for="lastName">Last Name</label>
+          <input type="text" id="editStudent-lastName" name="lastName" placeholder="Last Name" required [(ngModel)]="newStudent.lastName">
+        </div>
+      </div>
+      <div class="two fields">
+        <div class="field">
+          <label for="dob">Date of Birth</label>
+          <input type="date" id="editStudent-dob" name="dob" placeholder="Date of Birth" [(ngModel)]="newStudent.dob" required>
+        </div>
+        <div class="field">
+          <label for="gender">Gender</label>
+          <select class="ui dropdown" id="editStudent-gender" name="gender" [(ngModel)]="newStudent.gender" required>
+            <option>Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+        </div>
+      </div>
+      <h4 class="ui dividing header">Student Information</h4>
+      <div class="four fields">
+        <div class="field">
+          <label for="matricNo">Matric No.</label>
+          <input type="text" id="editStudent-matricNo" name="matricNo" placeholder="Matric No." required [(ngModel)]="newStudent.matricNo">
+        </div>
+        <div class="field">
+          <label for="faculty">Faculty</label>
+          <input type="text" id="editStudent-level" name="faculty" placeholder="Faculty" required [(ngModel)]="newStudent.faculty">
+        </div>
+        <div class="field">
+          <label for="department">Department</label>
+          <input type="text" id="editStudent-department" name="department" placeholder="Department" required [(ngModel)]="newStudent.department">
+        </div>
+        <div class="field">
+          <label for="level">Level</label>
+          <input type="text" id="editStudent-level" name="level" placeholder="Level" required [(ngModel)]="newStudent.level">
+        </div>
+      </div>
+      <input class="ui primary button" type="submit" value="Update">
+    </form>
+  </div>
 </div>
 
 <div class="ui modal scrolling transition hidden" style="top: 466px;" id="viewStudentForm">
+  <i class="close icon"></i>
   <div class="header" id="studentDetails-name"></div>
   <div class="content">
     <table class="ui very basic definition  table" style="border:0px">
@@ -148,5 +202,20 @@
         <td id="studentDetails-level"></td>
       </tr>
     </table>
+  </div>
+</div>
+
+<div class="ui test mini modal" id="deleteStudentConfirmation">
+  <i class="close icon"></i>
+  <div class="header">
+    Delete Student
+  </div>
+  <div class="content">
+    <div class="ui">Are you sure you want to delete this record?</div>
+  </div>
+  <div class="actions">
+    <button class="ui red right button" (click)="delete()">
+      Delete
+    </button>
   </div>
 </div>

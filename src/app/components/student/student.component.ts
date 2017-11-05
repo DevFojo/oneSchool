@@ -12,7 +12,6 @@ declare var $: any;
 })
 export class StudentComponent implements OnInit {
   students: Array<any>;
-  addStudentForm: FormGroup;
   post: any;                     // A property for our submitted form
   description: string = '';
   name: string = '';
@@ -24,35 +23,33 @@ export class StudentComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._studentService.getAll().subscribe(res => this.students = res);
+    this.refreshStudentList();
+    this.studentModelInit();
     $('.ui.dropdown').dropdown();
-    this.newStudent = {
-      'firstName': '',
-      'lastName': '',
-      'gender': '',
-      'faculty': '',
-      'dob': '',
-      'matricNo': '',
-      'department': '',
-      'level': ''
-    }
+
+  }
+
+  refreshStudentList() {
+    this._studentService.getAll().subscribe(res => this.students = res);
+
   }
 
 
   loadAddStudentModal() {
-    $('#addStudentForm')
-      .modal('show');
+    $('#addStudentForm').modal('show');
   }
 
   loadEditStudentModal(student: any) {
     console.log(student);
-    this.selectedStudent = student;
+    this.newStudent = student;
+    $('#editStudent-gender').val(student.gender).change();
     $('#editStudentForm')
       .modal('show');
   }
 
   loadStudentDetailsModal(student: any) {
     console.log(student);
+    this.newStudent = student;
     $('#studentDetails-name').html(student.firstName + ' ' + student.lastName);
     $('#studentDetails-matricNo').html(student.matricNo);
     $('#studentDetails-firstName').html(student.firstName);
@@ -65,22 +62,48 @@ export class StudentComponent implements OnInit {
     $('#viewStudentForm')
       .modal('show');
   }
+  studentModelInit() {
+    this.newStudent = {
+      'firstName': '',
+      'lastName': '',
+      'gender': '',
+      'faculty': '',
+      'dob': '',
+      'matricNo': '',
+      'department': '',
+      'level': ''
+    }
+  }
   add() {
     console.log(this.newStudent);
-    var newStudent = {
-      'firstName': this.newStudent.firstName,
-      'lastName': this.newStudent.lastName,
-      'gender': this.newStudent.gender,
-      'faculty': this.newStudent.faculty,
-      'dob': this.newStudent.dob,
-      'matricNo': this.newStudent.matricNo,
-      'department': this.newStudent.department,
-      'level': this.newStudent.level
-    };
-    this._studentService.create(newStudent).subscribe(res => this.students.push(res));
+    this._studentService.create(this.newStudent).subscribe(res => {
+      console.log(res);
+      this.refreshStudentList();
+    });
+    $('#addStudentForm').modal('hide');
+    this.studentModelInit();
+
   }
-  loadDeleteConfirmation() {
-    console.log('about to delete');
+
+  loadDeleteConfirmation(student: any) {
+    this.newStudent = student;
+    $('#deleteStudentConfirmation').modal('show');
+    console.log(this.newStudent);
+  }
+
+  delete() {
+    this._studentService.delete(this.newStudent).subscribe(res => {
+      console.log(res);
+      this.refreshStudentList();
+    });
+    $('#deleteStudentConfirmation').modal('hide');
+    this.studentModelInit();
+  }
+  edit() {
+    this._studentService.update(this.newStudent).subscribe(res => {
+      console.log(res);
+    });
+    this.studentModelInit();
   }
 
 }
