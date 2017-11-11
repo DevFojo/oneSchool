@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StudentService } from '../../services/student.service';
+import { FacultyService } from '../../services/faculty.service';
+import { DepartmentService } from '../../services/department.service';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 declare var jquery: any;
 declare var $: any;
@@ -10,10 +12,12 @@ declare var $: any;
   styleUrls: ['./student.component.css']
 })
 export class StudentComponent implements OnInit {
+  departments: Array<any>;
+  faculties: Array<any>;
   students: Array<any>;
   newStudent: any;
 
-  constructor(private _studentService: StudentService) {
+  constructor(private _studentService: StudentService, private _departmentService: DepartmentService, private _facultyService: FacultyService) {
 
   }
 
@@ -21,14 +25,23 @@ export class StudentComponent implements OnInit {
     this.refreshStudentList();
     this.studentModelInit();
     $('.ui.dropdown').dropdown();
+    this._departmentService.getAll().subscribe(res => {
+      this.departments = res;
+    });
+    this._facultyService.getAll().subscribe(res => {
+      this.faculties = res;
+    });
 
   }
 
   refreshStudentList() {
     this._studentService.getAll().subscribe(res => this.students = res);
-
   }
 
+  onFacultySelected() {
+    var selectedFaculty = $('#faculty').val();
+    this.departments.filter(d => d.faculty == selectedFaculty);
+  }
 
   loadAddStudentModal() {
     $('#addStudentForm').modal('show');
@@ -96,7 +109,7 @@ export class StudentComponent implements OnInit {
     this._studentService.update(this.newStudent).subscribe(res => {
       console.log(res);
     });
-    $('#editStudentForm').modal('hide');    
+    $('#editStudentForm').modal('hide');
     this.studentModelInit();
   }
 

@@ -3,11 +3,12 @@ var router = express.Router();
 var mongojs = require('mongojs');
 const MongoDbUri = 'mongodb://admin:admin@ds119685.mlab.com:19685/oneschool';
 
-var db = mongojs(MongoDbUri, ['students']);
+var studentCollection = mongojs(MongoDbUri, ['students']);
+var facultyCollection = mongojs(MongoDbUri, ['faculties']);
+var departmentCollection = mongojs(MongoDbUri, ['departments']);
 
-// Get All Todos
 router.get('/students', function (req, res, next) {
-  db.students.find(function (err, students) {
+  studentCollection.students.find(function (err, students) {
     if (err) {
       res.send(err);
     } else {
@@ -16,9 +17,8 @@ router.get('/students', function (req, res, next) {
   });
 });
 
-// Get Single Todo
 router.get('/student/:id', function (req, res, next) {
-  db.students.findOne({
+  studentCollection.students.findOne({
     _id: mongojs.ObjectId(req.params.id)
   }, function (err, student) {
     if (err) {
@@ -29,7 +29,6 @@ router.get('/student/:id', function (req, res, next) {
   });
 });
 
-// Save Todo
 router.post('/student', function (req, res, next) {
   var student = req.body;
   console.log(req);
@@ -39,7 +38,7 @@ router.post('/student', function (req, res, next) {
       "error": "Invalid Data"
     });
   } else {
-    db.students.save(student, function (err, result) {
+    studentCollection.students.save(student, function (err, result) {
       if (err) {
         res.send(err);
       } else {
@@ -49,7 +48,6 @@ router.post('/student', function (req, res, next) {
   }
 });
 
-// Update Todo
 router.put('/student/:id', function (req, res, next) {
   var student = req.body;
   delete student._id;
@@ -59,7 +57,7 @@ router.put('/student/:id', function (req, res, next) {
       "error": "Invalid Data"
     });
   } else {
-    db.students.update({
+    studentCollection.students.update({
       _id: mongojs.ObjectId(req.params.id)
     }, student, {}, function (err, result) {
       if (err) {
@@ -71,15 +69,35 @@ router.put('/student/:id', function (req, res, next) {
   }
 });
 
-// Delete Todo
 router.delete('/student/:id', function (req, res, next) {
-  db.students.remove({
+  studentCollection.students.remove({
     _id: mongojs.ObjectId(req.params.id)
   }, '', function (err, result) {
     if (err) {
       res.send(err);
     } else {
       res.json(result);
+    }
+  });
+});
+
+
+router.get('/faculties', function (req, res, next) {
+  facultyCollection.faculties.find(function (err, faculties) {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(faculties);
+    }
+  });
+});
+
+router.get('/departments', function (req, res, next) {
+  departmentCollection.departments.find(function (err, departments) {
+    if (err) {
+      res.send(err);
+    } else {
+      res.json(departments);
     }
   });
 });
