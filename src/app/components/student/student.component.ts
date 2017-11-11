@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { StudentService } from '../../services/student.service';
 import { FacultyService } from '../../services/faculty.service';
 import { DepartmentService } from '../../services/department.service';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 declare var jquery: any;
 declare var $: any;
 
@@ -12,8 +11,11 @@ declare var $: any;
   styleUrls: ['./student.component.css']
 })
 export class StudentComponent implements OnInit {
+
+  departmentList: Array<any>;
   departments: Array<any>;
   faculties: Array<any>;
+  facultyList: Array<any>;
   students: Array<any>;
   newStudent: any;
 
@@ -24,23 +26,27 @@ export class StudentComponent implements OnInit {
   ngOnInit() {
     this.refreshStudentList();
     this.studentModelInit();
+    this.refreshFacultyList();
+    this.refreshDepartmentList();
     $('.ui.dropdown').dropdown();
-    this._departmentService.getAll().subscribe(res => {
-      this.departments = res;
-    });
-    this._facultyService.getAll().subscribe(res => {
-      this.faculties = res;
-    });
-
+    this.validationInit();
   }
 
   refreshStudentList() {
     this._studentService.getAll().subscribe(res => this.students = res);
   }
+  refreshFacultyList() {
+    this._facultyService.getAll().subscribe(res => this.faculties = res);
+
+  }
+  refreshDepartmentList() {
+    this._departmentService.getAll().subscribe(res => this.departmentList = res);
+  }
 
   onFacultySelected() {
     var selectedFaculty = $('#faculty').val();
-    this.departments.filter(d => d.faculty == selectedFaculty);
+    $('#department').val('Select a Department').change();
+    this.departments = this.departmentList.filter(d => d.faculty == selectedFaculty);
   }
 
   loadAddStudentModal() {
@@ -81,13 +87,15 @@ export class StudentComponent implements OnInit {
     }
   }
   add() {
-    console.log(this.newStudent);
-    this._studentService.create(this.newStudent).subscribe(res => {
-      console.log(res);
-      this.refreshStudentList();
-    });
-    $('#addStudentForm').modal('hide');
-    this.studentModelInit();
+    if ($('#addStudentForm').form('is valid')) {
+      console.log(this.newStudent);
+      this._studentService.create(this.newStudent).subscribe(res => {
+        console.log(res);
+        this.refreshStudentList();
+      });
+      $('#addStudentForm').modal('hide');
+      this.studentModelInit();
+    }
 
   }
 
@@ -111,6 +119,108 @@ export class StudentComponent implements OnInit {
     });
     $('#editStudentForm').modal('hide');
     this.studentModelInit();
+  }
+
+  validationInit(): any {
+    $('.ui.form')
+      .form({
+        fields: {
+          firstName: {
+            identifier: 'firstName',
+            rules: [
+              {
+                type: 'empty',
+                prompt: 'Please enter your first name'
+              }
+            ]
+          },
+          lastName: {
+            identifier: 'lastName',
+            rules: [
+              {
+                type: 'empty',
+                prompt: 'Please enter your last name'
+              }
+            ]
+          },
+          gender: {
+            identifier: 'gender',
+            rules: [
+              {
+                type: 'empty',
+                prompt: 'Please select a gender'
+              },
+              {
+                type: 'not[default]',
+                prompt: 'Please select a gender'
+              }
+            ]
+          },
+          dob: {
+            identifier: 'dob',
+            rules: [
+              {
+                type: 'empty',
+                prompt: 'Please select a birth date'
+              }
+            ]
+          },
+          matricNo: {
+            identifier: 'matricNo',
+            rules: [
+              {
+                type: 'empty',
+                prompt: 'Please enter a matric number'
+              },
+              {
+                type: 'minLength[6]',
+                prompt: 'Matric number must be at least {ruleValue} characters'
+              }
+            ]
+          },
+          faculty: {
+            identifier: 'faculty',
+            rules: [
+              {
+                type: 'empty',
+                prompt: 'Please select a faculty'
+              },
+              {
+                type: 'not[default]',
+                prompt: 'Please select a faculty'
+              }
+            ]
+          },
+          department: {
+            identifier: 'department',
+            rules: [
+              {
+                type: 'empty',
+                prompt: 'Please select a department'
+              },
+              {
+                type: 'not[default]',
+                prompt: 'Please select a department'
+              }
+            ]
+          },
+          level: {
+            identifier: 'level',
+            rules: [
+              {
+                type: 'empty',
+                prompt: 'Please select a level'
+              },
+              {
+                type: 'not[default]',
+                prompt: 'Please select a level'
+              }
+            ]
+          }
+        },
+        inline: true
+      })
+      ;
   }
 
 }

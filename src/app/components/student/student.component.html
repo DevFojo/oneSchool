@@ -62,23 +62,23 @@
       <h4 class="ui dividing header">Personal Information</h4>
       <div class="two fields">
         <div class="field">
-          <label>First Name</label>
+          <label for="firstName">First Name</label>
           <input type="text" name="firstName" placeholder="First Name" required [(ngModel)]="newStudent.firstName">
         </div>
         <div class="field">
-          <label>Last Name</label>
+          <label for="lastName">Last Name</label>
           <input type="text" name="lastName" placeholder="Last Name" required [(ngModel)]="newStudent.lastName">
         </div>
       </div>
       <div class="two fields">
         <div class="field">
-          <label>Date of Birth</label>
+          <label for="dob">Date of Birth</label>
           <input type="date" name="dob" placeholder="Date of Birth" [(ngModel)]="newStudent.dob" required>
         </div>
         <div class="field">
           <label>Gender</label>
           <select class="ui dropdown" name="gender" [(ngModel)]="newStudent.gender" required>
-            <option>Gender</option>
+            <option value="default">Select a Gender</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
           </select>
@@ -87,23 +87,38 @@
       <h4 class="ui dividing header">Student Information</h4>
       <div class="four fields">
         <div class="field">
-          <label>Matric No.</label>
+          <label for="matricNo">Matric No.</label>
           <input type="text" name="matricNo" placeholder="Matric No." required [(ngModel)]="newStudent.matricNo">
         </div>
         <div class="field">
-          <label>Faculty</label>
-          <input type="text" name="department" placeholder="Faculty" required [(ngModel)]="newStudent.faculty">
+          <label for="faculty">Faculty</label>
+          <select class="ui dropdown" name="faculty" id="faculty" [(ngModel)]="newStudent.faculty" required (change)="onFacultySelected()">
+            <option value="default">Select a Faculty</option>
+            <option *ngFor="let faculty of faculties" value={{faculty.name}}>{{faculty.name}}</option>
+          </select>
         </div>
         <div class="field">
-          <label>Department</label>
-          <input type="text" name="lastName" placeholder="Department" required [(ngModel)]="newStudent.department">
+          <label for="department">Department</label>
+          <select class="ui dropdown" name="department" id="department" [(ngModel)]="newStudent.department" required>
+            <option value="default">Select a Department</option>
+            <option *ngFor="let department of departments" value={{department.name}}>{{department.name}}</option>
+          </select>
         </div>
         <div class="field">
-          <label>Level</label>
-          <input type="text" name="level" placeholder="Level" required [(ngModel)]="newStudent.level">
+          <label for="level">Level</label>
+          <select class="ui dropdown" name="level" id="level" [(ngModel)]="newStudent.level" required>
+            <option value="default">Select a Level</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
+            <option value="300">300</option>
+            <option value="400">400</option>
+            <option value="500">500</option>
+            <option value="600">600</option>
+          </select>
         </div>
       </div>
       <input class="ui primary button" type="submit" value="Submit">
+      <!-- <div class="ui error message"></div> -->
     </form>
   </div>
 </div>
