@@ -58,7 +58,7 @@
     Add A Student
   </div>
   <div class="content">
-    <form class="ui form" (ngSubmit)="add()">
+    <form class="ui form" id="addForm" (ngSubmit)="add()">
       <h4 class="ui dividing header">Personal Information</h4>
       <div class="two fields">
         <div class="field">
@@ -129,7 +129,7 @@
     Edit Student
   </div>
   <div class="content">
-    <form class="ui form" (ngSubmit)="edit()">
+    <form class="ui form" id="editForm" (ngSubmit)="edit()">
       <h4 class="ui dividing header">Personal Information</h4>
       <div class="two fields">
         <div class="field">
@@ -149,7 +149,7 @@
         <div class="field">
           <label for="gender">Gender</label>
           <select class="ui dropdown" id="editStudent-gender" name="gender" [(ngModel)]="newStudent.gender" required>
-            <option>Gender</option>
+            <option value="default">Select a Gender</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
           </select>
@@ -163,6 +163,32 @@
         </div>
         <div class="field">
           <label for="faculty">Faculty</label>
+          <select class="ui dropdown" name="faculty" id="editStudent-faculty" [(ngModel)]="newStudent.faculty" required (change)="onEditFacultySelected()">
+            <option value="default">Select a Faculty</option>
+            <option *ngFor="let faculty of faculties" value={{faculty.name}}>{{faculty.name}}</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="department">Department</label>
+          <select class="ui dropdown" name="department" id="editStudent-department" [(ngModel)]="newStudent.department" required>
+            <option value="default">Select a Department</option>
+            <option *ngFor="let department of departments" value={{department.name}}>{{department.name}}</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="level">Level</label>
+          <select class="ui dropdown" name="level" id="editStudent-level" [(ngModel)]="newStudent.level" required>
+            <option value="default">Select a Level</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
+            <option value="300">300</option>
+            <option value="400">400</option>
+            <option value="500">500</option>
+            <option value="600">600</option>
+          </select>
+        </div>
+        <!-- <div class="field">
+          <label for="faculty">Faculty</label>
           <input type="text" id="editStudent-level" name="faculty" placeholder="Faculty" required [(ngModel)]="newStudent.faculty">
         </div>
         <div class="field">
@@ -172,7 +198,7 @@
         <div class="field">
           <label for="level">Level</label>
           <input type="text" id="editStudent-level" name="level" placeholder="Level" required [(ngModel)]="newStudent.level">
-        </div>
+        </div> -->
       </div>
       <input class="ui primary button" type="submit" value="Update">
     </form>
